@@ -5,47 +5,25 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 224 71% 4%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
-    --primary: 220 14% 96%;
-    --primary-foreground: 220 9% 46%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 9% 46%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
-    --accent: 220 14% 96%;
-    --accent-foreground: 220 9% 46%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 220 70% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 224 71% 4%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
-    --card: 224 71% 4%;
-    --card-foreground: 210 40% 98%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 220 9% 46%;
-    --secondary: 215 27% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 215 27% 17%;
-    --muted-foreground: 217 10% 65%;
-    --accent: 215 27% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 215 27% 17%;
-    --input: 215 27% 17%;
-    --ring: 216 12% 84%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 220 70% 50%;
+    --radius: 0.75rem;
   }
 }
 
@@ -54,6 +32,28 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .event-card {
+    @apply bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:shadow-lg hover:shadow-purple-100 transition-all duration-300;
+  }
+
+  .train-card {
+    @apply bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg hover:shadow-orange-100 transition-all duration-300;
+  }
+
+  .event-button {
+    @apply bg-event hover:bg-event/90 text-event-foreground shadow-lg hover:shadow-xl transition-all duration-200;
+  }
+
+  .train-button {
+    @apply bg-train hover:bg-train/90 text-train-foreground shadow-lg hover:shadow-xl transition-all duration-200;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl;
   }
 }

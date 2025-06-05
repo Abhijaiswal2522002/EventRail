@@ -5,10 +5,7 @@ export async function GET(request: NextRequest, { params }: { params: { pnr: str
   try {
     const pnr = params.pnr
 
-    if (!pnr || pnr.length !== 10) {
-      return NextResponse.json({ error: "Invalid PNR number" }, { status: 400 })
-    }
-
+    // Check PNR status using IRCTC API
     const pnrStatus = await checkPNRStatus(pnr)
 
     if (!pnrStatus) {
@@ -17,7 +14,7 @@ export async function GET(request: NextRequest, { params }: { params: { pnr: str
 
     return NextResponse.json(pnrStatus)
   } catch (error) {
-    console.error("Error checking PNR status:", error)
+    console.error("Error checking PNR status with IRCTC API:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

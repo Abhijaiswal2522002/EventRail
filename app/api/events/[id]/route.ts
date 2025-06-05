@@ -1,22 +1,34 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getDatabase } from "@/lib/db"
-import { ObjectId } from "mongodb"
+import { getEventById } from "@/lib/indian-events-api"
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const db = await getDatabase()
+    const eventId = params.id
 
-    const event = await db.collection("events").findOne({
-      _id: new ObjectId(params.id),
-    })
-
-    if (!event) {
-      return NextResponse.json({ error: "Event not found" }, { status: 404 })
+    if (!eventId) {
+      return NextResponse.json({ success: false, error: "Event ID is required" }, { status: 400 })
     }
 
-    return NextResponse.json(event)
+    const event = await getEventById(eventId)
+
+    if (!event) {
+      return NextResponse.json({ success: false, error: "Event not found" }, { status: 404 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: event,
+      message: "Event retrieved successfully",
+    })
   } catch (error) {
-    console.error("Event fetch error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error(`Event fetch error for ID ${params.id}:`, error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to fetch event",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    )
   }
 }

@@ -36,10 +36,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Mock login - replace with actual API call
+      // Extract name from email (before @) and capitalize it
+      const nameFromEmail = email
+        .split("@")[0]
+        .split(".")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ")
+
       const mockUser = {
         id: "1",
-        name: "John Doe",
+        name: nameFromEmail,
         email: email,
         role: "user",
       }

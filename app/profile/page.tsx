@@ -11,18 +11,6 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar, Clock, MapPin, Train, Ticket, Settings, Download, LogIn } from "lucide-react"
 
-// Mock user data
-const userData = {
-  name: "Rajesh Kumar",
-  email: "rajesh.kumar@example.com",
-  phone: "+91 98765 43210",
-  avatar: "/placeholder.svg",
-  memberSince: "January 2024",
-  totalBookings: 15,
-  upcomingEvents: 4,
-  completedTrips: 12,
-}
-
 // Mock bookings data
 const eventBookings = [
   {
@@ -92,6 +80,18 @@ export default function ProfilePage() {
     }
   }, [isLoggedIn, isLoading, router])
 
+  // Remove the static userData object and replace with:
+  const userData = {
+    name: user?.name || "User",
+    email: user?.email || "user@example.com",
+    phone: "+91 98765 43210",
+    avatar: "/placeholder.svg",
+    memberSince: "January 2024",
+    totalBookings: 15,
+    upcomingEvents: 4,
+    completedTrips: 12,
+  }
+
   if (isLoading) {
     return (
       <div className="container flex min-h-[50vh] items-center justify-center">
@@ -128,17 +128,17 @@ export default function ProfilePage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={userData.name} />
+              <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={user?.name || "User"} />
               <AvatarFallback className="bg-gradient-to-r from-orange-100 to-green-100 text-orange-600 text-xl">
-                {userData.name
+                {(user?.name || "User")
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-3xl font-bold">{userData.name}</h1>
-              <p className="text-muted-foreground">{userData.email}</p>
+              <h1 className="text-3xl font-bold">{user?.name || "User"}</h1>
+              <p className="text-muted-foreground">{user?.email || "user@example.com"}</p>
               <p className="text-sm text-muted-foreground">Member since {userData.memberSince}</p>
             </div>
           </div>
