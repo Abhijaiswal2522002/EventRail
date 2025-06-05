@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventRail Platform
+
+A modern web platform for discovering events and booking railway tickets across India.
+
+## Features
+
+- **Event Discovery**: Browse and search for cultural events, concerts, festivals, and conferences
+- **Railway Booking**: Search and book train tickets with real-time availability
+- **User Authentication**: Secure login and registration system
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Dark Mode Support**: Toggle between light and dark themes
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Authentication**: Custom auth system with JWT
+- **Database**: MongoDB with Mongoose
+- **Email**: SMTP integration for notifications
+- **Payment**: Stripe integration for secure payments
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
+- Node.js 18+ 
+- MongoDB database
+- SMTP email service
+- Stripe account (for payments)
+
+### Installation
+
+1. Clone the repository
+\`\`\`bash
+git clone <repository-url>
+cd eventrail-platform
+\`\`\`
+
+2. Install dependencies
+\`\`\`bash
+npm install
+\`\`\`
+
+3. Set up environment variables
+\`\`\`bash
+cp .env.example .env.local
+\`\`\`
+
+4. Configure your environment variables in `.env.local`
+
+5. Run the development server
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `.env.example` for required environment variables.
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Deploy on Vercel
+## Support
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For support, email support@eventrail.com or create an issue in the repository.
