@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Clock, Users, Star, IndianRupee } from "lucide-react"
+import Image from "next/image"
 
 interface Event {
   id: string
@@ -31,6 +32,9 @@ interface Event {
   popularity: number
 }
 
+const cities = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"]
+const categories = ["Music", "Technology", "Food & Drink", "Arts & Culture", "Sports", "Business"]
+
 export default function IndianEventsSearch() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -41,14 +45,7 @@ export default function IndianEventsSearch() {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "")
   const [selectedDate, setSelectedDate] = useState(searchParams.get("date") || "")
 
-  const cities = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad"]
-  const categories = ["Music", "Technology", "Food & Drink", "Arts & Culture", "Sports", "Business"]
-
-  useEffect(() => {
-    searchEvents()
-  }, [searchParams])
-
-  const searchEvents = async () => {
+  const searchEvents = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -72,7 +69,11 @@ export default function IndianEventsSearch() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchQuery, selectedCity, selectedCategory, selectedDate])
+
+  useEffect(() => {
+    searchEvents()
+  }, [searchParams, searchEvents])
 
   const handleSearch = () => {
     const params = new URLSearchParams()
@@ -177,9 +178,11 @@ export default function IndianEventsSearch() {
             <Card key={event.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-0">
                 {event.images.length > 0 && (
-                  <img
+                  <Image
                     src={event.images[0] || "/placeholder.svg"}
                     alt={event.title}
+                    width={400}
+                    height={192}
                     className="w-full h-48 object-cover rounded-t-lg"
                   />
                 )}

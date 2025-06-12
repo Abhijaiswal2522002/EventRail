@@ -36,6 +36,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      // Mock login validation
+      if (!email || !password) {
+        return false
+      }
+
       // Extract name from email (before @) and capitalize it
       const nameFromEmail = email
         .split("@")[0]

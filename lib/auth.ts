@@ -6,7 +6,7 @@ import { getDatabase } from "./db"
 import bcrypt from "bcryptjs"
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(getDatabase() as any),
+  adapter: MongoDBAdapter(getDatabase() as Parameters<typeof MongoDBAdapter>[0]),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

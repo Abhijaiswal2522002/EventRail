@@ -3,7 +3,7 @@ import { getDatabase } from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
-import { createPaymentIntent } from "@/lib/payment"
+import { createPaymentIntent } from "@/lib/utils/payment"
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find class details
-    const classDetails = train.classes.find((cls: any) => cls.name === travelClass)
+    const classDetails = train.classes.find((cls: { name: string }) => cls.name === travelClass)
 
     if (!classDetails) {
       return NextResponse.json({ error: "Class not found" }, { status: 404 })

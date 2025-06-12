@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getDatabase } from "@/lib/db"
 import { sampleIndianEvents, indianEventCategories } from "@/lib/indian-events-data"
 
 export async function GET(request: NextRequest) {
@@ -12,10 +11,10 @@ export async function GET(request: NextRequest) {
     const page = Number.parseInt(searchParams.get("page") || "1")
     const limit = Number.parseInt(searchParams.get("limit") || "10")
 
-    const db = await getDatabase()
+    // const db = await getDatabase() // Removed unused db variable
 
     // Build query for Indian events
-    const query: any = {
+    const query: Record<string, unknown> = {
       status: "published",
       // Add India-specific filters
     }

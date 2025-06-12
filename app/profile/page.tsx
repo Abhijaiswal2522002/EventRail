@@ -71,7 +71,7 @@ const railwayBookings = [
 ]
 
 export default function ProfilePage() {
-  const { user, isLoggedIn, isLoading } = useAuth()
+  const { isLoggedIn, isLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -82,8 +82,8 @@ export default function ProfilePage() {
 
   // Remove the static userData object and replace with:
   const userData = {
-    name: user?.name || "User",
-    email: user?.email || "user@example.com",
+    name: "User",
+    email: "user@example.com",
     phone: "+91 98765 43210",
     avatar: "/placeholder.svg",
     memberSince: "January 2024",
@@ -128,17 +128,17 @@ export default function ProfilePage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={user?.name || "User"} />
+              <AvatarImage src={userData.avatar || "/placeholder.svg"} alt="User" />
               <AvatarFallback className="bg-gradient-to-r from-orange-100 to-green-100 text-orange-600 text-xl">
-                {(user?.name || "User")
+                {"User"
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-3xl font-bold">{user?.name || "User"}</h1>
-              <p className="text-muted-foreground">{user?.email || "user@example.com"}</p>
+              <h1 className="text-3xl font-bold">User</h1>
+              <p className="text-muted-foreground">user@example.com</p>
               <p className="text-sm text-muted-foreground">Member since {userData.memberSince}</p>
             </div>
           </div>
@@ -214,9 +214,7 @@ export default function ProfilePage() {
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No Event Bookings</h3>
-                    <p className="text-muted-foreground text-center mb-4">
-                      You haven't booked any events yet. Discover amazing events happening near you!
-                    </p>
+                    <p className="text-muted-foreground text-center mb-4">{"You haven't booked any events yet."}</p>
                     <Button asChild>
                       <Link href="/events">Explore Events</Link>
                     </Button>
@@ -294,7 +292,7 @@ export default function ProfilePage() {
                     <Train className="h-12 w-12 text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No Railway Bookings</h3>
                     <p className="text-muted-foreground text-center mb-4">
-                      You haven't booked any train tickets yet. Start planning your next journey!
+                      {"You haven't booked any train tickets yet."}
                     </p>
                     <Button asChild>
                       <Link href="/railways">Book Railways</Link>

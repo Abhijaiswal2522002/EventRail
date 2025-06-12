@@ -119,7 +119,7 @@ class IndianEventsAPI {
     this.apiKey = process.env.EVENTS_API_KEY || ""
   }
 
-  private async makeRequest(endpoint: string, params?: Record<string, any>): Promise<any> {
+  private async makeRequest(endpoint: string, params?: Record<string, unknown>): Promise<unknown> {
     try {
       const url = new URL(this.baseUrl)
 
@@ -158,7 +158,7 @@ class IndianEventsAPI {
   }
 
   async searchEvents(params: EventSearchParams): Promise<EventAPIResponse> {
-    const apiParams: Record<string, any> = {
+    const apiParams: Record<string, unknown> = {
       q: params.query || "events",
     }
 
@@ -204,7 +204,7 @@ class IndianEventsAPI {
       const response = await this.makeRequest("", apiParams)
 
       if (response.data) {
-        return this.transformSingleEvent(response.data)
+        return this.transformSingleEvent(response.data as Record<string, unknown>)
       }
 
       return this.getMockEventById(eventId)
@@ -255,8 +255,8 @@ class IndianEventsAPI {
     return response.events
   }
 
-  private transformEventResponse(response: any, params: EventSearchParams): EventAPIResponse {
-    const events = response.events_results || []
+  private transformEventResponse(response: unknown, params: EventSearchParams): EventAPIResponse {
+    const events = (response as any).events_results || []
 
     return {
       events: events.map((event: any) => this.transformSingleEvent(event)).slice(0, params.limit || 20),
@@ -267,68 +267,68 @@ class IndianEventsAPI {
     }
   }
 
-  private transformSingleEvent(event: any): EventData {
+  private transformSingleEvent(event: Record<string, unknown>): EventData {
     // Handle the specific API response format you provided
-    const startDateTime = new Date(event.start_time || event.start_time_utc)
-    const endDateTime = new Date(event.end_time || event.end_time_utc)
+    const startDateTime = new Date((event.start_time as string) || (event.start_time_utc as string))
+    const endDateTime = new Date((event.end_time as string) || (event.end_time_utc as string))
 
     return {
-      id: event.event_id || event.id || Math.random().toString(36),
-      title: event.name || event.title || "Untitled Event",
-      description: event.description || "",
-      category: this.extractCategory(event.tags || []),
-      subcategory: event.venue?.subtype,
+      id: (event.event_id as string) || (event.id as string) || Math.random().toString(36),
+      title: (event.name as string) || (event.title as string) || "Untitled Event",
+      description: (event.description as string) || "",
+      category: this.extractCategory((event.tags as string[]) || []),
+      subcategory: (event.venue as any)?.subtype,
       date: startDateTime.toISOString().split("T")[0],
       startTime: startDateTime.toTimeString().substring(0, 5),
       endTime: endDateTime.toTimeString().substring(0, 5),
-      timezone: event.venue?.timezone || "Asia/Kolkata",
+      timezone: (event.venue as any)?.timezone || "Asia/Kolkata",
       venue: {
-        name: event.venue?.name || "TBD",
-        address: event.venue?.full_address || "",
-        city: event.venue?.city || "",
-        state: event.venue?.state || "",
-        country: this.mapCountryCode(event.venue?.country) || "India",
-        pincode: event.venue?.postal_code,
+        name: (event.venue as any)?.name || "TBD",
+        address: (event.venue as any)?.full_address || "",
+        city: (event.venue as any)?.city || "",
+        state: (event.venue as any)?.state || "",
+        country: this.mapCountryCode((event.venue as any)?.country) || "India",
+        pincode: (event.venue as any)?.postal_code,
         coordinates:
-          event.venue?.latitude && event.venue?.longitude
+          (event.venue as any)?.latitude && (event.venue as any)?.longitude
             ? {
-                lat: Number.parseFloat(event.venue.latitude),
-                lng: Number.parseFloat(event.venue.longitude),
+                lat: Number.parseFloat((event.venue as any).latitude),
+                lng: Number.parseFloat((event.venue as any).longitude),
               }
             : undefined,
-        phone: event.venue?.phone_number,
-        website: event.venue?.website,
-        rating: event.venue?.rating,
-        reviewCount: event.venue?.review_count,
+        phone: (event.venue as any)?.phone_number,
+        website: (event.venue as any)?.website,
+        rating: (event.venue as any)?.rating,
+        reviewCount: (event.venue as any)?.review_count,
       },
       organizer: {
-        name: event.publisher || "Event Organizer",
-        website: event.link,
+        name: (event.publisher as string) || "Event Organizer",
+        website: event.link as string,
       },
-      images: event.thumbnail ? [event.thumbnail] : [],
+      images: (event.thumbnail ? [event.thumbnail] : []) as string[],
       ticketing: {
-        available: Boolean(event.ticket_links?.length),
-        tiers: this.generateTicketTiers(event.ticket_links || []),
+        available: Boolean((event.ticket_links as any)?.length),
+        tiers: this.generateTicketTiers((event.ticket_links as any) || []),
         currency: "INR",
-        bookingUrl: event.ticket_links?.[0]?.link,
-        ticketLinks: event.ticket_links || [],
+        bookingUrl: (event.ticket_links as any)?.[0]?.link,
+        ticketLinks: (event.ticket_links as any) || [],
       },
-      tags: event.tags || [],
-      languages: [event.language || "en"],
-      ageRestriction: this.extractAgeRestriction(event.description),
+      tags: (event.tags as string[]) || [],
+      languages: [(event.language as string) || "en"],
+      ageRestriction: this.extractAgeRestriction(event.description as string),
       status: "active",
-      popularity: event.venue?.review_count || 100,
-      rating: event.venue?.rating,
-      reviewCount: event.venue?.review_count,
-      isVirtual: event.is_virtual || false,
+      popularity: ((event.venue as any)?.review_count as number) || 100,
+      rating: (event.venue as any)?.rating as number,
+      reviewCount: (event.venue as any)?.review_count as number,
+      isVirtual: (event.is_virtual as boolean) || false,
       publisher: event.publisher
         ? {
-            name: event.publisher,
-            domain: event.publisher_domain,
-            favicon: event.publisher_favicon,
+            name: event.publisher as string,
+            domain: event.publisher_domain as string,
+            favicon: event.publisher_favicon as string,
           }
         : undefined,
-      infoLinks: event.info_links || [],
+      infoLinks: (event.info_links as any) || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
@@ -417,7 +417,7 @@ class IndianEventsAPI {
   }
 
   // Mock data methods for development and fallback
-  private getMockData(endpoint: string, params?: any): any {
+  private getMockData(endpoint: string, params?: Record<string, unknown>): unknown {
     return {
       events_results: this.getMockEvents(params?.limit || 20),
       search_metadata: {
@@ -427,7 +427,7 @@ class IndianEventsAPI {
     }
   }
 
-  private getMockEvents(limit: number): any[] {
+  private getMockEvents(limit: number): Record<string, unknown>[] {
     const mockEvents = [
       {
         event_id: "mock-1",
@@ -523,4 +523,19 @@ export async function getUpcomingEvents(city?: string): Promise<EventData[]> {
 
 export async function getEventsByLocation(lat: number, lng: number, radius?: number): Promise<EventData[]> {
   return eventsAPI.getEventsByLocation(lat, lng, radius)
+}
+
+// Export utility function for categories
+export async function getEventCategories(): Promise<string[]> {
+  return [
+    "Music",
+    "Technology",
+    "Food & Drink",
+    "Arts & Culture",
+    "Sports",
+    "Business",
+    "Festival",
+    "Entertainment",
+    "Education",
+  ]
 }

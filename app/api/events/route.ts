@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const db = await getDatabase()
 
     // Build query
-    const query: any = { status: "published" }
+    const query: Record<string, unknown> = { status: "published" }
 
     if (location) {
       query["location.city"] = { $regex: location, $options: "i" }

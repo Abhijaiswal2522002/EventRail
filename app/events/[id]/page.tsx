@@ -64,6 +64,8 @@ const event = {
 }
 
 export default function EventPage({ params }: { params: { id: string } }) {
+  // Use params.id if needed for dynamic content
+  console.log("Event ID:", params.id)
   return (
     <div className="container py-8">
       <div className="grid gap-6 lg:grid-cols-3 lg:gap-10">

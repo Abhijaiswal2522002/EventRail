@@ -3,7 +3,7 @@ import { getDatabase } from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
-import { createPaymentIntent } from "@/lib/payment"
+import { createPaymentIntent } from "@/lib/utils/payment"
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     }
 
     // Find ticket tier
-    const ticketTier = event.ticketTiers.find((tier: any) => tier.id === ticketTierId)
+    const ticketTier = event.ticketTiers.find((tier: { id: string }) => tier.id === ticketTierId)
 
     if (!ticketTier) {
       return NextResponse.json({ error: "Ticket tier not found" }, { status: 404 })

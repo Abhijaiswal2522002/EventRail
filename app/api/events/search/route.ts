@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
       subcategory: searchParams.get("subcategory") || undefined,
       date: searchParams.get("date") || undefined,
       language: searchParams.get("language") || undefined,
-      sortBy: (searchParams.get("sortBy") as any) || "date",
-      sortOrder: (searchParams.get("sortOrder") as any) || "asc",
+      sortBy: (searchParams.get("sortBy") as "date" | "popularity" | "price" | "rating") || "date",
+      sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "asc",
       page: Number.parseInt(searchParams.get("page") || "1"),
       limit: Number.parseInt(searchParams.get("limit") || "20"),
     }
