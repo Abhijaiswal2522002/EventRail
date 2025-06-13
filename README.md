@@ -1,76 +1,62 @@
-# EventRail Platform
+# 🚆 EventRail Platform
 
-A modern web platform for discovering events and booking railway tickets across India.
+A modern full-stack web platform for discovering events and booking railway tickets across India.
 
-## Features
+---
 
-- **Event Discovery**: Browse and search for cultural events, concerts, festivals, and conferences
-- **Railway Booking**: Search and book train tickets with real-time availability
-- **User Authentication**: Secure login and registration system
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Dark Mode Support**: Toggle between light and dark themes
+## ✨ Features
 
-## Tech Stack
+- 🎫 **Event Discovery**: Browse cultural events, concerts, festivals, and tech conferences
+- 🚄 **Railway Booking**: Search and book train tickets with real-time seat availability
+- 🔐 **User Authentication**: Secure registration and login system using JWT
+- 🌓 **Responsive & Dark Mode**: Works beautifully across devices with light/dark theme toggle
+- 💳 **Secure Payments**: Stripe integration for booking payments
+- 📩 **Email Notifications**: Get updates via SMTP-based emails
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **UI Components**: shadcn/ui
-- **Authentication**: Custom auth system with JWT
-- **Database**: MongoDB with Mongoose
-- **Email**: SMTP integration for notifications
-- **Payment**: Stripe integration for secure payments
+---
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
+| Layer         | Tech Used                          |
+|---------------|------------------------------------|
+| Frontend      | Next.js 14, React, TypeScript      |
+| Styling       | Tailwind CSS, ShadCN UI            |
+| Backend       | Node.js, Express                   |
+| Database      | MongoDB with Mongoose              |
+| Auth          | Custom JWT-based authentication    |
+| Email         | Nodemailer (SMTP)                  |
+| Payments      | Stripe API                         |
 
-- Node.js 18+ 
-- MongoDB database
-- SMTP email service
-- Stripe account (for payments)
+---
 
-### Installation
+## 📸 Project Structure (Tree View)
 
-1. Clone the repository
-\`\`\`bash
-git clone <repository-url>
+![Project Tree](./public/images/project-tree.png)
+
+> _The above screenshot visually represents the folder structure and layout of the project._
+
+---
+
+## ⚙️ Getting Started
+
+### ✅ Prerequisites
+
+- Node.js `v18+`
+- MongoDB instance (local or cloud)
+- SMTP Email Service (e.g., Gmail, Mailtrap)
+- Stripe account
+
+---
+
+### 🧩 Installation
+
+
+# Clone the repository
+git clone https://github.com/your-username/eventrail-platform.git
 cd eventrail-platform
-\`\`\`
 
-2. Install dependencies
-\`\`\`bash
+# Install dependencies
 npm install
-\`\`\`
 
-3. Set up environment variables
-\`\`\`bash
+# Set up environment variables
 cp .env.example .env.local
-\`\`\`
-
-4. Configure your environment variables in `.env.local`
-
-5. Run the development server
-\`\`\`bash
-npm run dev
-\`\`\`
-
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Environment Variables
-
-See `.env.example` for required environment variables.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support, email support@eventrail.com or create an issue in the repository.
