@@ -31,7 +31,7 @@ A modern full-stack web platform for discovering events and booking railway tick
 
 ## 📸 Project Structure (Tree View)
 
-![Project Tree](./public/images/project-tree.png)
+![Project Tree](./public/HomePage.png)
 
 > _The above screenshot visually represents the folder structure and layout of the project._
 
