@@ -32,8 +32,8 @@ A modern full-stack web platform for discovering events and booking railway tick
 ## 📸 Project Structure (Tree View)
 
 ![HomePage](./public/HomePage.png)
-![Train Booking](./public/HomePage.png)
-![Login](./public/HomePage.png)
+![Train Booking](./public/TrainBooking.png)
+![Login](./public/Login.png)
 
 > _The above screenshot visually represents the folder structure and layout of the project._
 
