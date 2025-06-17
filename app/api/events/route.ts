@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session) {
+    if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     const event = {
       ...eventData,
-      organizer: session.user.id,
+      organizer: session.user.email, // Using email as the user identifier
       status: "published",
       createdAt: new Date(),
       updatedAt: new Date(),

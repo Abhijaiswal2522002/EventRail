@@ -9,7 +9,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session) {
+    if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -40,17 +40,26 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const totalAmount = ticketTier.price * quantity
 
     // Create payment intent
-    const paymentIntent = await createPaymentIntent(totalAmount)
+    const paymentResult = await createPaymentIntent(totalAmount)
+
+    if (!paymentResult.success || !paymentResult.paymentIntent) {
+      return NextResponse.json(
+        {
+          error: paymentResult.error?.message || "Failed to create payment",
+        },
+        { status: 400 },
+      )
+    }
 
     // Create booking
     const booking = {
-      userId: session.user.id,
+      userEmail: session.user.email,
       eventId: params.id,
       ticketTierId,
       quantity,
       totalAmount,
       status: "pending",
-      paymentId: paymentIntent.id,
+      paymentId: paymentResult.paymentIntent.id,
       bookingId: `EVT-${Date.now()}`,
       createdAt: new Date(),
     }
@@ -59,7 +68,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     return NextResponse.json({
       bookingId: result.insertedId,
-      clientSecret: paymentIntent.client_secret,
+      clientSecret: paymentResult.paymentIntent.id, // Using ID as client secret for mock implementation
       totalAmount,
     })
   } catch (error) {

@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
     const totalAmount = classDetails.price * passengers.length
 
     // Create payment intent
-    const paymentIntent = await createPaymentIntent(totalAmount)
+ const paymentIntent = await createPaymentIntent(totalAmount);
+
 
     // Generate PNR
     const pnr = `PNR${Date.now()}`

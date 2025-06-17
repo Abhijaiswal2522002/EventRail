@@ -1,115 +1,118 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { getDatabase } from "@/lib/db"
-import { confirmPayment } from "@/lib/payment"
-import { sendEventBookingConfirmation, sendRailwayBookingConfirmation } from "@/lib/email"
-import { ObjectId } from "mongodb"
+import { type NextRequest, NextResponse } from "next/server";
+import { getDatabase } from "@/lib/db";
+import { confirmPayment } from "@/lib/payment";
+import {
+  sendEventBookingConfirmation,
+  sendRailwayBookingConfirmation,
+} from "@/lib/email";
+import { ObjectId } from "mongodb";
 
 export async function POST(request: NextRequest) {
   try {
-    const { paymentIntentId, bookingType } = await request.json()
+    const { paymentIntentId, bookingType } = await request.json();
 
-    // Confirm payment with Stripe
-    const isPaymentSuccessful = await confirmPayment(paymentIntentId)
+    const isPaymentSuccessful = await confirmPayment(paymentIntentId);
 
     if (!isPaymentSuccessful) {
-      return NextResponse.json({ error: "Payment failed" }, { status: 400 })
+      return NextResponse.json({ error: "Payment failed" }, { status: 400 });
     }
 
-    const db = await getDatabase()
+    const db = await getDatabase();
 
     if (bookingType === "event") {
-      // Update event booking
-      const booking = await db
-        .collection("eventBookings")
-        .findOneAndUpdate(
-          { paymentId: paymentIntentId },
-          { $set: { status: "confirmed" } },
-          { returnDocument: "after" },
-        )
+     const bookingResult = await db.collection("railwayBookings").findOneAndUpdate(
+  { paymentId: paymentIntentId },
+  { $set: { status: "confirmed" } },
+  { returnDocument: "after" }
+);
 
-      if (booking.value) {
-        // Update ticket tier sold count
-        await db.collection("events").updateOne(
-          {
-            _id: new ObjectId(booking.value.eventId),
-            "ticketTiers.id": booking.value.ticketTierId,
-          },
-          {
-            $inc: { "ticketTiers.$.sold": booking.value.quantity },
-          },
-        )
+const booking = bookingResult?.value;
 
-        // Send confirmation email
-        const event = await db.collection("events").findOne({
-          _id: new ObjectId(booking.value.eventId),
-        })
+if (!booking) {
+  return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+}
 
-        const user = await db.collection("users").findOne({
-          _id: new ObjectId(booking.value.userId),
-        })
 
-        if (event && user) {
-          await sendEventBookingConfirmation(user.email, {
-            eventTitle: event.title,
-            date: event.date,
-            time: event.startTime,
-            location: event.location.venueName,
-            bookingId: booking.value.bookingId,
-            totalAmount: booking.value.totalAmount,
-          })
+      await db.collection("events").updateOne(
+        {
+          _id: new ObjectId(booking.eventId),
+          "ticketTiers.id": booking.ticketTierId,
+        },
+        {
+          $inc: { "ticketTiers.$.sold": booking.quantity },
         }
+      );
+
+      const event = await db.collection("events").findOne({
+        _id: new ObjectId(booking.eventId),
+      });
+
+      const user = await db.collection("users").findOne({
+        _id: new ObjectId(booking.userId),
+      });
+
+      if (event && user) {
+        await sendEventBookingConfirmation(user.email, {
+          eventTitle: event.title,
+          date: event.date,
+          time: event.startTime,
+          location: event.location.venueName,
+          bookingId: booking.bookingId,
+          totalAmount: booking.totalAmount,
+        });
       }
     } else if (bookingType === "railway") {
-      // Update railway booking
-      const booking = await db
-        .collection("railwayBookings")
-        .findOneAndUpdate(
-          { paymentId: paymentIntentId },
-          { $set: { status: "confirmed" } },
-          { returnDocument: "after" },
-        )
+     const bookingResult = await db.collection("eventBookings").findOneAndUpdate(
+  { paymentId: paymentIntentId },
+  { $set: { status: "confirmed" } },
+  { returnDocument: "after" }
+);
 
-      if (booking.value) {
-        // Update train seat availability
-        await db.collection("trains").updateOne(
-          {
-            _id: new ObjectId(booking.value.trainId),
-            "classes.name": booking.value.class,
-          },
-          {
-            $inc: { "classes.$.availableSeats": -booking.value.passengers.length },
-          },
-        )
+const booking = bookingResult?.value;
 
-        // Send confirmation email
-        const train = await db.collection("trains").findOne({
-          _id: new ObjectId(booking.value.trainId),
-        })
+if (!booking) {
+  return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+}
 
-        const user = await db.collection("users").findOne({
-          _id: new ObjectId(booking.value.userId),
-        })
 
-        if (train && user) {
-          await sendRailwayBookingConfirmation(user.email, {
-            trainName: train.trainName,
-            trainNumber: train.trainNumber,
-            source: train.source,
-            destination: train.destination,
-            journeyDate: booking.value.journeyDate,
-            departureTime: train.departureTime,
-            arrivalTime: train.arrivalTime,
-            class: booking.value.class,
-            pnr: booking.value.pnr,
-            totalAmount: booking.value.totalAmount,
-          })
+      await db.collection("trains").updateOne(
+        {
+          _id: new ObjectId(booking.trainId),
+          "classes.name": booking.class,
+        },
+        {
+          $inc: { "classes.$.availableSeats": -booking.passengers.length },
         }
+      );
+
+      const train = await db.collection("trains").findOne({
+        _id: new ObjectId(booking.trainId),
+      });
+
+      const user = await db.collection("users").findOne({
+        _id: new ObjectId(booking.userId),
+      });
+
+      if (train && user) {
+        await sendRailwayBookingConfirmation(user.email, {
+          trainName: train.trainName,
+          trainNumber: train.trainNumber,
+          source: train.source,
+          destination: train.destination,
+          journeyDate: booking.journeyDate,
+          departureTime: train.departureTime,
+          arrivalTime: train.arrivalTime,
+          class: booking.class,
+          pnr: booking.pnr,
+          totalAmount: booking.totalAmount,
+        });
       }
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
+
   } catch (error) {
-    console.error("Payment confirmation error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Payment confirmation error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

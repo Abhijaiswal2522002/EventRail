@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer"
 
+interface BookingDetails {
+  [key: string]: string | number
+}
+
 const transporter = nodemailer.createTransporter({
   host: process.env.SMTP_HOST,
   port: Number.parseInt(process.env.SMTP_PORT || "587"),
@@ -10,7 +14,7 @@ const transporter = nodemailer.createTransporter({
   },
 })
 
-export async function sendEventBookingConfirmation(email: string, bookingDetails: any) {
+export async function sendEventBookingConfirmation(email: string, bookingDetails: BookingDetails): Promise<void> {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     to: email,
@@ -31,7 +35,7 @@ export async function sendEventBookingConfirmation(email: string, bookingDetails
   await transporter.sendMail(mailOptions)
 }
 
-export async function sendRailwayBookingConfirmation(email: string, bookingDetails: any) {
+export async function sendRailwayBookingConfirmation(email: string, bookingDetails: BookingDetails): Promise<void> {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     to: email,
