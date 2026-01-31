@@ -3,7 +3,7 @@ import { getDatabase } from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
-import { createPaymentIntent } from "@/lib/utils/payment"
+import { createPaymentIntent } from "@/lib/payment"
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const totalAmount = classDetails.price * passengers.length
 
     // Create payment intent
- const paymentIntent = await createPaymentIntent(totalAmount);
+    const paymentIntent = await createPaymentIntent(totalAmount);
 
 
     // Generate PNR

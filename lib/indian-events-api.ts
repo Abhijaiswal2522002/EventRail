@@ -167,6 +167,7 @@ interface EventsAPIResponse {
     status: string
     total_results: number
   }
+  data?: EventResponseData
 }
 
 class IndianEventsAPI {
@@ -330,7 +331,7 @@ class IndianEventsAPI {
     // Handle the specific API response format you provided
     const startDateTime = new Date(event.start_time || event.start_time_utc || new Date().toISOString())
     const endDateTime = new Date(event.end_time || event.end_time_utc || new Date().toISOString())
-    const venue = event.venue || {}
+    const venue = event.venue || ({} as Partial<EventVenue>)
 
     return {
       id: event.event_id || event.id || Math.random().toString(36),
@@ -352,9 +353,9 @@ class IndianEventsAPI {
         coordinates:
           venue.latitude && venue.longitude
             ? {
-                lat: Number.parseFloat(String(venue.latitude)),
-                lng: Number.parseFloat(String(venue.longitude)),
-              }
+              lat: Number.parseFloat(String(venue.latitude)),
+              lng: Number.parseFloat(String(venue.longitude)),
+            }
             : undefined,
         phone: venue.phone_number,
         website: venue.website,
@@ -383,10 +384,10 @@ class IndianEventsAPI {
       isVirtual: Boolean(event.is_virtual),
       publisher: event.publisher
         ? {
-            name: event.publisher,
-            domain: event.publisher_domain || "",
-            favicon: event.publisher_favicon || "",
-          }
+          name: event.publisher,
+          domain: event.publisher_domain || "",
+          favicon: event.publisher_favicon || "",
+        }
         : undefined,
       infoLinks: event.info_links || [],
       createdAt: new Date().toISOString(),

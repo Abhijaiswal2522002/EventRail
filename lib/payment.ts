@@ -2,7 +2,7 @@
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16",
+  typescript: true,
 });
 
 export async function createPaymentIntent(amount: number): Promise<Stripe.PaymentIntent> {
@@ -11,4 +11,14 @@ export async function createPaymentIntent(amount: number): Promise<Stripe.Paymen
     currency: "inr",
     payment_method_types: ["card"],
   });
+}
+
+export async function confirmPayment(paymentIntentId: string): Promise<boolean> {
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    return paymentIntent.status === "succeeded";
+  } catch (error) {
+    console.error("Error confirming payment:", error);
+    return false;
+  }
 }

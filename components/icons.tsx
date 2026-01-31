@@ -1,7 +1,8 @@
-import { Calendar, Train, Sparkles, type LightbulbIcon as LucideProps } from "lucide-react"
+import { Calendar, Train, Sparkles } from "lucide-react"
+import { type ComponentProps } from "react"
 
 export const Icons = {
-  logo: (props: LucideProps) => (
+  logo: (props: ComponentProps<"div">) => (
     <div className="flex items-center gap-1" {...props}>
       <Calendar className="h-5 w-5 text-purple-600" />
       <Train className="h-5 w-5 text-orange-600" />
